@@ -11,7 +11,7 @@ public static class Screenshoter
     [MenuItem("Screenshoter/Take Screenshot")]
     public static void TakeScreenshot()
     {
-        ScreenCapture.CaptureScreenshot(DateTime.Now.Ticks + ".png");
+        Application.CaptureScreenshot(DateTime.Now.Ticks + ".png");
     }
 	
 }

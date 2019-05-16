@@ -99,7 +99,7 @@ namespace LDraw
             {
                 if (!file.Contains(".meta"))
                 {
-                    string fileName = file.Replace(_BasePartsPath, "").Split('.')[0];
+                    string fileName = Path.GetFileName(file).Split('.')[0];
                    
                     if (!_Parts.ContainsKey(fileName))
                         _Parts.Add(fileName, file);

@@ -44,14 +44,13 @@ namespace LDraw
 			}
 
 			_Model = LDrawModel.Create(_Name, LDrawConfig.Instance.GetSerializedPart(_Name));
-			
-			_Matrix = new Matrix4x4(
-				new Vector4(param[3], param[6], param[9],  0),
-				new Vector4(param[4], param[7], param[10], 0),
-				new Vector4(param[5], param[8], param[11], 0),
-				new Vector4(param[0], param[1], param[2],  1)
-			);
-		}
+
+            _Matrix = new Matrix4x4();
+            _Matrix.SetRow(0, new Vector4(param[3], param[4], param[5], param[0]));
+            _Matrix.SetRow(1, new Vector4(param[6], param[7], param[8], param[1]));
+            _Matrix.SetRow(2, new Vector4(param[9], param[10], param[11], param[2]));
+            _Matrix.SetRow(3, new Vector4(0, 0, 0,  1));
+        }
 
 		private Material GetMaterial()
 		{

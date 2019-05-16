@@ -10,7 +10,7 @@ namespace LDraw
 		{
 			tr.localPosition = trs.ExtractPosition();
 			tr.localRotation = trs.ExtractRotation();
-			tr.localScale = trs.lossyScale;
+			tr.localScale = trs.ExtractScale();
 		}
 		
 		public static Matrix4x4 ExtractLocalTRS(this Transform tr)
