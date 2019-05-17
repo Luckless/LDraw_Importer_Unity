@@ -40,3 +40,9 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
+Assets/LDraw-Importer/GeneratedMeshes
+Assets/LDraw-Importer/GeneratedMaterials
+
+!Assets/LDraw-Importer/GeneratedMeshes/.gitkeep
+!Assets/LDraw-Importer/GeneratedMaterials/.gitkeep

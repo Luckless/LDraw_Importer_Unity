@@ -25,11 +25,15 @@ namespace LDraw
 
 		public override void Deserialize(string serialized)
 		{
-			var args = serialized.Split(' ');
-			float[] param = new float[9];
-			for (int i = 0; i < param.Length; i++)
-			{
-				int argNum = i + 2;
+            //args are seperated by spaces
+            var args = serialized.Split(' ');
+            //there are 9 args after the command type and color that matter
+            float[] param = new float[9];
+
+            for (int i = 0; i < param.Length; i++)
+            {
+                //offset by two to skip the command type and color
+                int argNum = i + 2;
 				if (!Single.TryParse(args[argNum], out param[i]))
 				{
 					Debug.LogError(
@@ -40,7 +44,8 @@ namespace LDraw
 				}
 			}
 
-			_Verts = new Vector3[]
+            //create the three verts from the 12 points
+            _Verts = new Vector3[]
 			{
 				new Vector3(param[0], param[1], param[2]),
 				new Vector3(param[3], param[4], param[5]),

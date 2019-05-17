@@ -133,6 +133,7 @@ namespace LDraw
                                 int alphaIndex = Array.IndexOf(args, "ALPHA");
                                 var mat = new Material(alphaIndex  > 0? _DefaultTransparentMaterial : _DefaultOpaqueMaterial);
                                 mat.name = args[2];
+
                                 mat.color = alphaIndex > 0? new Color(color.r, color.g, color.b, int.Parse(args[alphaIndex + 1]) / 256f) 
                                     : color;
                             

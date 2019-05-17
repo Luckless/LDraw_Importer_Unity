@@ -5,7 +5,8 @@ using System.IO;
 using UnityEngine;
 namespace LDraw
 {
-    
+
+    //command types
     public enum CommandType
     {
         SubFile = 1,
@@ -24,6 +25,8 @@ namespace LDraw
             LDrawCommand command = null;
             int type;
             var args = line.Split(' ');
+            
+            //first arg is the command type
             if (Int32.TryParse(args[0], out type))
             {
                 var commandType = (CommandType)type;
@@ -42,12 +45,15 @@ namespace LDraw
                 }
             }
            
+            //if it is a valid command
             if (command != null)
             {
+                //parse the second arg for color code
                 if(!int.TryParse(args[1],out command._ColorCode))
                 {
                     command._Color = args[1];
                 }
+                //set the parent ldraw
                 command._Parent = parent;
                 command.Deserialize(line);
             }
