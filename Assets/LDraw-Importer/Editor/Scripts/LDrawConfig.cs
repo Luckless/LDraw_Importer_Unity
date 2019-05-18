@@ -107,6 +107,7 @@ namespace LDraw
             }
         }
 
+        //parses all colors out of ldcfgalt.ldr
         private void ParseColors()
         {
             _MainColors = new Dictionary<int, Material>();
@@ -117,26 +118,57 @@ namespace LDraw
                 {
                     Regex regex = new Regex("[ ]{2,}", RegexOptions.None);
                     line = regex.Replace(line, " ").Trim();
+                    //args split by spaces
                     var args = line.Split(' ');
+                    
+                    //read each line where second arg is !COLOUR
+                    //example line --> "0 !COLOUR Black                              CODE   0   VALUE #05131D   EDGE #3F474C"
                     if (args.Length  > 1 && args[1] == "!COLOUR")
-                    {
+                    {   
+                        //set up a path for the Assets/Ldraw-Importer/GeneratedMateriats/<ColorName>.mat
                         var path =_MaterialsPath + args[2] + ".mat";
                         if (File.Exists(path))
-                        {
+                        {   
+                            //if file exists, load material and add to the Color dictionary
                             _MainColors.Add(int.Parse(args[4]), AssetDatabase.LoadAssetAtPath<Material>(path));
                         }
                         else
                         {
                             Color color;
+                            //if the mat file doesn't exist yet, parse the color code out of the seventh argument
                             if (ColorUtility.TryParseHtmlString(args[6], out color))
                             {
+                                //some colors have arg called ALPHA - treat those colors special and add alpha to mat
                                 int alphaIndex = Array.IndexOf(args, "ALPHA");
                                 var mat = new Material(alphaIndex  > 0? _DefaultTransparentMaterial : _DefaultOpaqueMaterial);
                                 mat.name = args[2];
 
                                 mat.color = alphaIndex > 0? new Color(color.r, color.g, color.b, int.Parse(args[alphaIndex + 1]) / 256f) 
                                     : color;
-                            
+
+                                //if the color is CHROME
+                                int chromeIndex = Array.IndexOf(args, "CHROME");
+                                if (chromeIndex > 0)
+                                {
+                                    mat.SetFloat("_Metallic", .9f);
+                                    mat.SetFloat("_Glossiness", .9f);
+                                }
+
+                                //if the color is METAL
+                                int metallicIndex = Array.IndexOf(args, "METAL");
+                                if(metallicIndex > 0)
+                                {
+                                    mat.SetFloat("_Metallic", .6f );
+                                    mat.SetFloat("_Glossiness", .6f);
+                                }
+
+                                //if the color is LUMINANCE, set EmissionColor for glow
+                                int luminanceIndex = Array.IndexOf(args, "LUMINANCE");
+                                if (luminanceIndex > 0)
+                                {
+                                    mat.SetColor("_EmissionColor", mat.color);
+                                }
+
                                 AssetDatabase.CreateAsset(mat, path);
                                 _MainColors.Add(int.Parse(args[4]), mat);
                             }
